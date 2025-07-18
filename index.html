@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Statystyki meczów i Drużyny</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    #formDruzynaSekcja, #szczegolyDruzyny, #szczegolyZawodnika {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body class="p-4">
+
+  <h2>🗂️ Statystyki meczów i zarządzanie drużynami</h2>
+
+  <ul class="nav nav-tabs mb-3" id="tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="tab-mecze" data-bs-toggle="tab" data-bs-target="#mecze" type="button" role="tab">Statystyki meczów</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-druzyny" data-bs-toggle="tab" data-bs-target="#druzyny" type="button" role="tab">Drużyny</button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+
+    <!-- Zakładka Statystyki meczów -->
+    <div class="tab-pane fade show active" id="mecze" role="tabpanel" aria-labelledby="tab-mecze">
+      <form id="formMecz" class="mb-4">
+        <div class="mb-3">
+          <label>Data meczu</label>
+          <input name="data" class="form-control" type="date" required />
+        </div>
+        <div class="mb-3">
+          <label>Drużyna przeciwna</label>
+          <input name="przeciwnik" class="form-control" placeholder="Drużyna przeciwna" required />
+        </div>
+        <div class="mb-3">
+          <label>Ocena meczu (1-5)</label>
+          <input name="ocena" class="form-control" type="number" min="1" max="5" required />
+        </div>
+        <div class="mb-3">
+          <label>Najlepszy zawodnik</label>
+          <input name="najlepszy" class="form-control" placeholder="Najlepszy zawodnik" required />
+        </div>
+
+        <h5>Zawodnicy z naszej drużyny (3 najlepszych)</h5>
+        <div class="mb-3"><input name="z1nasza" class="form-control" placeholder="Zawodnik 1" required /></div>
+        <div class="mb-3"><input name="z2nasza" class="form-control" placeholder="Zawodnik 2" required /></div>
+        <div class="mb-3"><input name="z3nasza" class="form-control" placeholder="Zawodnik 3" required /></div>
+
+        <h5>Zawodnicy drużyny przeciwnej (3 najlepszych)</h5>
+        <div class="mb-3"><input name="z1przeciwnik" class="form-control" placeholder="Zawodnik 1" required /></div>
+        <div class="mb-3"><input name="z2przeciwnik" class="form-control" placeholder="Zawodnik 2" required /></div>
+        <div class="mb-3"><input name="z3przeciwnik" class="form-control" placeholder="Zawodnik 3" required /></div>
+
+        <div class="form-check form-switch my-3">
+          <input class="form-check-input" type="checkbox" id="toggleOpisy" />
+          <label class="form-check-label" for="toggleOpisy">Dodaj opisy zawodników</label>
+        </div>
+
+        <div id="sekcjaOpisy" class="d-none">
+          <h5>Opisy zawodników</h5>
+          <div class="mb-3"><input name="opisNajlepszy" class="form-control" placeholder="Opis najlepszego zawodnika" /></div>
+          <div class="mb-3"><input name="opis1nasza" class="form-control" placeholder="Opis zawodnik 1 naszej drużyny" /></div>
+          <div class="mb-3"><input name="opis2nasza" class="form-control" placeholder="Opis zawodnik 2 naszej drużyny" /></div>
+          <div class="mb-3"><input name="opis3nasza" class="form-control" placeholder="Opis zawodnik 3 naszej drużyny" /></div>
+          <div class="mb-3"><input name="opis1przeciwnik" class="form-control" placeholder="Opis zawodnik 1 przeciwnika" /></div>
+          <div class="mb-3"><input name="opis2przeciwnik" class="form-control" placeholder="Opis zawodnik 2 przeciwnika" /></div>
+          <div class="mb-3"><input name="opis3przeciwnik" class="form-control" placeholder="Opis zawodnik 3 przeciwnika" /></div>
+        </div>
+
+        <div class="form-check form-switch my-3">
+          <input class="form-check-input" type="checkbox" id="toggleOceny" />
+          <label class="form-check-label" for="toggleOceny">Dodaj oceny zawodników</label>
+        </div>
+
+        <div id="sekcjaOceny" class="d-none">
+          <h5>Oceny zawodników (1-5)</h5>
+          <div class="mb-3"><input name="ocenaNajlepszy" class="form-control" type="number" min="1" max="5" placeholder="Ocena najlepszego zawodnika" /></div>
+          <div class="mb-3"><input name="ocena1nasza" class="form-control" type="number" min="1" max="5" placeholder="Ocena zawodnik 1 naszej drużyny" /></div>
+          <div class="mb-3"><input name="ocena2nasza" class="form-control" type="number" min="1" max="5" placeholder="Ocena zawodnik 2 naszej drużyny" /></div>
+          <div class="mb-3"><input name="ocena3nasza" class="form-control" type="number" min="1" max="5" placeholder="Ocena zawodnik 3 naszej drużyny" /></div>
+          <div class="mb-3"><input name="ocena1przeciwnik" class="form-control" type="number" min="1" max="5" placeholder="Ocena zawodnik 1 przeciwnika" /></div>
+          <div class="mb-3"><input name="ocena2przeciwnik" class="form-control" type="number" min="1" max="5" placeholder="Ocena zawodnik 2 przeciwnika" /></div>
+          <div class="mb-3"><input name="ocena3przeciwnik" class="form-control" type="number" min="1" max="5" placeholder="Ocena zawodnik 3 przeciwnika" /></div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Zapisz mecz</button>
+      </form>
+
+      <h4>Lista meczów</h4>
+      <table class="table" id="tabelaMecze">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Przeciwnik</th>
+            <th>Ocena</th>
+            <th>Najlepszy zawodnik</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h4>Szukaj zawodnika</h4>
+      <input id="szukajInput" class="form-control mb-3" placeholder="Wpisz nazwisko zawodnika lub drużyny" />
+      <div id="wynikiSzukaj"></div>
+    </div>
+
+    <!-- Zakładka Drużyny -->
+    <div class="tab-pane fade" id="druzyny" role="tabpanel" aria-labelledby="tab-druzyny">
+      <h4>Lista drużyn</h4>
+      <ul id="listaDruzyn" class="list-group mb-3"></ul>
+
+      <button id="nowaDruzynaBtn" class="btn btn-success mb-3">Dodaj nową drużynę</button>
+
+      <div id="formDruzynaSekcja" class="d-none">
+        <h4 id="tytulFormDruzyna">Dodaj drużynę</h4>
+        <form id="formDruzyna">
+          <div class="mb-3">
+            <label>Nazwa drużyny</label>
+            <input name="nazwaDruzyny" class="form-control" required />
+          </div>
+          <div>
+            <h5>Zawodnicy drużyny</h5>
+            <ul id="listaZawodnikow" class="list-group mb-3"></ul>
+            <input id="nowyZawodnikInput" class="form-control mb-2" placeholder="Dodaj zawodnika" />
+            <button id="dodajZawodnikaBtn" type="button" class="btn btn-secondary mb-3">Dodaj zawodnika</button>
+          </div>
+          <button type="submit" class="btn btn-primary">Zapisz drużynę</button>
+          <button id="anulujDruzynaBtn" type="button" class="btn btn-danger ms-2">Anuluj</button>
+        </form>
+      </div>
+
+      <div id="szczegolyDruzyny" class="d-none">
+        <h4>Drużyna: <span id="nazwaDruzyny"></span></h4>
+        <div id="skladDruzyny"></div>
+        <button id="powrotDoListyDruzyn" class="btn btn-secondary mt-3">Powrót do listy drużyn</button>
+      </div>
+
+      <div id="szczegolyZawodnika" class="d-none">
+        <h4>Zawodnik: <span id="nazwaZawodnika"></span></h4>
+
+        <form id="formZawodnik">
+          <div class="mb-3">
+            <label>Ilość minut na boisku</label>
+            <input type="number" min="0" class="form-control" name="minuty" required />
+          </div>
+          <div class="mb-3">
+            <label>Wynik testów sprawnościowych (1-10)</label>
+            <input type="number" min="1" max="10" class="form-control" name="testy" required />
+          </div>
+          <div class="mb-3">
+            <label>Ocena trenera (1-10)</label>
+            <input type="number" min="1" max="10" class="form-control" name="ocena" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Zapisz dane zawodnika</button>
+          <button type="button" id="anulujZawodnikBtn" class="btn btn-danger ms-2">Anuluj</button>
+        </form>
+
+        <div id="wykresPostepow" style="margin-top:20px;">
+          <canvas id="chartPostepy" width="400" height="200"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // --- Dane z localStorage ---
+    let mecze = JSON.parse(localStorage.getItem('mecze')) || [];
+    let druzyny = JSON.parse(localStorage.getItem('druzyny')) || {};
+    let zawodnicyInfo = JSON.parse(localStorage.getItem('zawodnicyInfo')) || {}; // { "Zawodnik": [ {minuty, testy, ocena}, ... ] }
+
+    // --- Pomocnicze funkcje do localStorage ---
+    function zapiszMecze() {
+      localStorage.setItem('mecze', JSON.stringify(mecze));
+    }
+    function zapiszDruzyny() {
+      localStorage.setItem('druzyny', JSON.stringify(druzyny));
+    }
+    function zapiszZawodnicyInfo() {
+      localStorage.setItem('zawodnicyInfo', JSON.stringify(zawodnicyInfo));
+    }
+
+    // -------- Zakładka Statystyki meczów ---------
+
+    const formMecz = document.getElementById('formMecz');
+    const tabelaMecze = document.querySelector('#tabelaMecze tbody');
+    const szukajInput = document.getElementById('szukajInput');
+    const wynikiSzukaj = document.getElementById('wynikiSzukaj');
+
+    const toggleOpisy = document.getElementById('toggleOpisy');
+    const sekcjaOpisy = document.getElementById('sekcjaOpisy');
+    const toggleOceny = document.getElementById('toggleOceny');
+    const sekcjaOceny = document.getElementById('sekcjaOceny');
+
+    toggleOpisy.addEventListener('change', () => {
+      sekcjaOpisy.classList.toggle('d-none', !toggleOpisy.checked);
+    });
+    toggleOceny.addEventListener('change', () => {
+      sekcjaOceny.classList.toggle('d-none', !toggleOceny.checked);
+    });
+
+    formMecz.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = formMecz.data.value;
+      const przeciwnik = formMecz.przeciwnik.value.trim();
+      const ocena = Number(formMecz.ocena.value);
+      const najlepszy = formMecz.najlepszy.value.trim();
+
+      const nasza3 = [formMecz.z1nasza.value.trim(), formMecz.z2nasza.value.trim(), formMecz.z3nasza.value.trim()];
+      const przeciwnik3 = [formMecz.z1przeciwnik.value.trim(), formMecz.z2przeciwnik.value.trim(), formMecz.z3przeciwnik.value.trim()];
+
+      // Opisy i oceny (opcjonalne)
+      const opisy = toggleOpisy.checked ? {
+        najlepszy: formMecz.opisNajlepszy.value.trim(),
+        nasza: [formMecz.opis1nasza.value.trim(), formMecz.opis2nasza.value.trim(), formMecz.opis3nasza.value.trim()],
+        przeciwnik: [formMecz.opis1przeciwnik.value.trim(), formMecz.opis2przeciwnik.value.trim(), formMecz.opis3przeciwnik.value.trim()]
+      } : null;
+
+      const ocenyZawodnikow = toggleOceny.checked ? {
+        najlepszy: Number(formMecz.ocenaNajlepszy.value),
+        nasza: [Number(formMecz.ocena1nasza.value), Number(formMecz.ocena2nasza.value), Number(formMecz.ocena3nasza.value)],
+        przeciwnik: [Number(formMecz.ocena1przeciwnik.value), Number(formMecz.ocena2przeciwnik.value), Number(formMecz.ocena3przeciwnik.value)]
+      } : null;
+
+      mecze.push({
+        data, przeciwnik, ocena, najlepszy,
+        nasza3, przeciwnik3,
+        opisy, ocenyZawodnikow
+      });
+
+      zapiszMecze();
+      formMecz.reset();
+      toggleOpisy.checked = false;
+      toggleOceny.checked = false;
+      sekcjaOpisy.classList.add('d-none');
+      sekcjaOceny.classList.add('d-none');
+      wyswietlMecze();
+      alert('Mecz dodany!');
+    });
+
+    function wyswietlMecze() {
+      tabelaMecze.innerHTML = '';
+      mecze.forEach((m, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${m.data}</td>
+          <td>${m.przeciwnik}</td>
+          <td>${m.ocena}</td>
+          <td>${m.najlepszy}</td>
+        `;
+        tabelaMecze.appendChild(tr);
+      });
+    }
+    wyswietlMecze();
+
+    // Szukanie zawodnika
+    szukajInput.addEventListener('input', () => {
+      const szukaj = szukajInput.value.toLowerCase();
+      wynikiSzukaj.innerHTML = '';
+      if (!szukaj) return;
+
+      const znalezione = [];
+
+      mecze.forEach((m) => {
+        // Szukaj w zawodnikach naszej drużyny
+        m.nasza3.forEach((z, idx) => {
+          if (z.toLowerCase().includes(szukaj)) {
+            znalezione.push({
+              mecz: m,
+              zawodnik: z,
+              drużyna: 'nasza',
+              opis: m.opisy?.nasza?.[idx] || '',
+              ocena: m.ocenyZawodnikow?.nasza?.[idx] || ''
+            });
+          }
+        });
+
+        // Przeciwnicy
+        m.przeciwnik3.forEach((z, idx) => {
+          if (z.toLowerCase().includes(szukaj)) {
+            znalezione.push({
+              mecz: m,
+              zawodnik: z,
+              drużyna: 'przeciwnik',
+              opis: m.opisy?.przeciwnik?.[idx] || '',
+              ocena: m.ocenyZawodnikow?.przeciwnik?.[idx] || ''
+            });
+          }
+        });
+
+        // Najlepszy zawodnik
+        if (m.najlepszy.toLowerCase().includes(szukaj)) {
+          znalezione.push({
+            mecz: m,
+            zawodnik: m.najlepszy,
+            drużyna: 'najlepszy',
+            opis: m.opisy?.najlepszy || '',
+            ocena: m.ocenyZawodnikow?.najlepszy || ''
+          });
+        }
+      });
+
+      if (znalezione.length === 0) {
+        wynikiSzukaj.innerHTML = '<p>Nie znaleziono zawodnika.</p>';
+        return;
+      }
+
+      znalezione.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'border p-2 mb-2';
+
+        div.innerHTML = `
+          <b>Zawodnik:</b> ${item.zawodnik} (${item.drużyna})<br/>
+          <b>Mecz:</b> ${item.mecz.data} vs ${item.mecz.przeciwnik}<br/>
+          <b>Ocena meczu:</b> ${item.mecz.ocena}<br/>
+          <b>Opis:</b> ${item.opis || '-'}<br/>
+          <b>Ocena zawodnika:</b> ${item.ocena || '-'}
+        `;
+        wynikiSzukaj.appendChild(div);
+      });
+    });
+
+    // -------- Zakładka Drużyny ---------
+
+    const listaDruzyn = document.getElementById('listaDruzyn');
+    const nowaDruzynaBtn = document.getElementById('nowaDruzynaBtn');
+    const formDruzynaSekcja = document.getElementById('formDruzynaSekcja');
+    const formDruzyna = document.getElementById('formDruzyna');
+    const listaZawodnikow = document.getElementById('listaZawodnikow');
+    const nowyZawodnikInput = document.getElementById('nowyZawodnikInput');
+    const dodajZawodnikaBtn = document.getElementById('dodajZawodnikaBtn');
+    const anulujDruzynaBtn = document.getElementById('anulujDruzynaBtn');
+    const tytulFormDruzyna = document.getElementById('tytulFormDruzyna');
+
+    const szczegolyDruzyny = document.getElementById('szczegolyDruzyny');
+    const nazwaDruzynySpan = document.getElementById('nazwaDruzyny');
+    const skladDruzynyDiv = document.getElementById('skladDruzyny');
+    const powrotDoListyDruzynBtn = document.getElementById('powrotDoListyDruzyn');
+
+    const szczegolyZawodnika = document.getElementById('szczegolyZawodnika');
+    const nazwaZawodnikaSpan = document.getElementById('nazwaZawodnika');
+    const formZawodnik = document.getElementById('formZawodnik');
+    const anulujZawodnikBtn = document.getElementById('anulujZawodnikBtn');
+    const ctx = document.getElementById('chartPostepy').getContext('2d');
+
+    let aktualnaEdycjaDruzyny = null;
+    let tymczasowiZawodnicy = [];
+    let aktywnaDruzyna = null;
+    let aktywnyZawodnik = null;
+    let chart = null;
+
+    // Pokaz listę drużyn
+    function aktualizujListeDruzyn() {
+      listaDruzyn.innerHTML = '';
+      for (const nazwa in druzyny) {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.textContent = nazwa;
+
+        const btnGroup = document.createElement('div');
+
+        const pokazBtn = document.createElement('button');
+        pokazBtn.textContent = 'Szczegóły';
+        pokazBtn.className = 'btn btn-sm btn-info me-2';
+        pokazBtn.onclick = () => pokazSzczegolyDruzyny(nazwa);
+
+        const edytujBtn = document.createElement('button');
+        edytujBtn.textContent = 'Edytuj';
+        edytujBtn.className = 'btn btn-sm btn-warning me-2';
+        edytujBtn.onclick = () => edytujDruzyne(nazwa);
+
+        const usunBtn = document.createElement('button');
+        usunBtn.textContent = 'Usuń';
+        usunBtn.className = 'btn btn-sm btn-danger';
+        usunBtn.onclick = () => {
+          if (confirm(`Usunąć drużynę ${nazwa}?`)) {
+            delete druzyny[nazwa];
+            zapiszDruzyny();
+            aktualizujListeDruzyn();
+          }
+        };
+
+        btnGroup.appendChild(pokazBtn);
+        btnGroup.appendChild(edytujBtn);
+        btnGroup.appendChild(usunBtn);
+
+        li.appendChild(btnGroup);
+        listaDruzyn.appendChild(li);
+      }
+    }
+
+    nowaDruzynaBtn.onclick = () => {
+      formDruzynaSekcja.classList.remove('d-none');
+      szczegolyDruzyny.classList.add('d-none');
+      szczegolyZawodnika.classList.add('d-none');
+      tytulFormDruzyna.textContent = 'Dodaj drużynę';
+      formDruzyna.nazwaDruzyny.value = '';
+      tymczasowiZawodnicy = [];
+      aktualizujListeZawodnikow();
+      aktualnaEdycjaDruzyny = null;
+    };
+
+    dodajZawodnikaBtn.onclick = () => {
+      const val = nowyZawodnikInput.value.trim();
+      if (val && !tymczasowiZawodnicy.includes(val)) {
+        tymczasowiZawodnicy.push(val);
+        aktualizujListeZawodnikow();
+        nowyZawodnikInput.value = '';
+      }
+    };
+
+    function aktualizujListeZawodnikow() {
+      listaZawodnikow.innerHTML = '';
+      tymczasowiZawodnicy.forEach((z, i) => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.textContent = z;
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Usuń';
+        delBtn.className = 'btn btn-sm btn-danger';
+        delBtn.onclick = () => {
+          tymczasowiZawodnicy.splice(i,1);
+          aktualizujListeZawodnikow();
+        };
+
+        li.appendChild(delBtn);
+        listaZawodnikow.appendChild(li);
+      });
+    }
+
+    anulujDruzynaBtn.onclick = () => {
+      formDruzynaSekcja.classList.add('d-none');
+      szczegolyDruzyny.classList.add('d-none');
+      szczegolyZawodnika.classList.add('d-none');
+    };
+
+    formDruzyna.onsubmit = e => {
+      e.preventDefault();
+      const nazwa = formDruzyna.nazwaDruzyny.value.trim();
+      if (!nazwa) return alert('Podaj nazwę drużyny');
+
+      if (aktualnaEdycjaDruzyny && aktualnaEdycjaDruzyny !== nazwa && druzyny[nazwa]) {
+        return alert('Drużyna o takiej nazwie już istnieje');
+      }
+
+      // Jeśli zmieniamy nazwę drużyny, usuń starą
+      if (aktualnaEdycjaDruzyny && aktualnaEdycjaDruzyny !== nazwa) {
+        delete druzyny[aktualnaEdycjaDruzyny];
+      }
+
+      druzyny[nazwa] = tymczasowiZawodnicy.slice();
+      zapiszDruzyny();
+
+      alert(aktualnaEdycjaDruzyny ? 'Drużyna zmieniona' : 'Drużyna dodana');
+
+      formDruzynaSekcja.classList.add('d-none');
+      aktualizujListeDruzyn();
+    };
+
+    // Edycja drużyny
+    function edytujDruzyne(nazwa) {
+      formDruzynaSekcja.classList.remove('d-none');
+      szczegolyDruzyny.classList.add('d-none');
+      szczegolyZawodnika.classList.add('d-none');
+      tytulFormDruzyna.textContent = `Edytuj drużynę ${nazwa}`;
+      formDruzyna.nazwaDruzyny.value = nazwa;
+      tymczasowiZawodnicy = druzyny[nazwa].slice();
+      aktualujListeZawodnikow();
+      aktualnaEdycjaDruzyny = nazwa;
+    }
+
+    // Pokaz szczegóły drużyny i listę zawodników
+    function pokazSzczegolyDruzyny(nazwa) {
+      aktywnaDruzyna = nazwa;
+      formDruzynaSekcja.classList.add('d-none');
+      szczegolyZawodnika.classList.add('d-none');
+      szczegolyDruzyny.classList.remove('d-none');
+
+      nazwaDruzynySpan.textContent = nazwa;
+
+      skladDruzynyDiv.innerHTML = '';
+      const ul = document.createElement('ul');
+      ul.className = 'list-group';
+      druzyny[nazwa].forEach(zawodnik => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.textContent = zawodnik;
+
+        const btnEdit = document.createElement('button');
+        btnEdit.textContent = 'Edytuj';
+        btnEdit.className = 'btn btn-sm btn-warning';
+        btnEdit.onclick = () => pokazSzczegolyZawodnika(zawodnik);
+
+        li.appendChild(btnEdit);
+        ul.appendChild(li);
+      });
+      skladDruzynyDiv.appendChild(ul);
+    }
+
+    powrotDoListyDruzynBtn.onclick = () => {
+      szczegolyDruzyny.classList.add('d-none');
+      szczegolyZawodnika.classList.add('d-none');
+      formDruzynaSekcja.classList.add('d-none');
+      aktualizujListeDruzyn();
+    };
+
+    // Szczegóły zawodnika, formularz do minut/testów/oceny
+    function pokazSzczegolyZawodnika(nazwaZ) {
+      aktywnyZawodnik = nazwaZ;
+      szczegolyZawodnika.classList.remove('d-none');
+      szczegolyDruzyny.classList.add('d-none');
+      formDruzynaSekcja.classList.add('d-none');
+      nazwaZawodnikaSpan.textContent = nazwaZ;
+
+      const dane = zawodnicyInfo[nazwaZ] || [];
+
+      // Wypełnij formę ostatnimi danymi jeśli są
+      if (dane.length > 0) {
+        const ostatni = dane[dane.length-1];
+        formZawodnik.minuty.value = ostatni.minuty;
+        formZawodnik.testy.value = ostatni.testy;
+        formZawodnik.ocena.value = ostatni.ocena;
+      } else {
+        formZawodnik.minuty.value = '';
+        formZawodnik.testy.value = '';
+        formZawodnik.ocena.value = '';
+      }
+
+      rysujWykresPostepow(nazwaZ);
+    }
+
+    formZawodnik.onsubmit = e => {
+      e.preventDefault();
+      const minuty = Number(formZawodnik.minuty.value);
+      const testy = Number(formZawodnik.testy.value);
+      const ocena = Number(formZawodnik.ocena.value);
+
+      if (minuty < 0 || testy < 1 || testy > 10 || ocena < 1 || ocena > 10) {
+        return alert('Niepoprawne wartości w formularzu zawodnika.');
+      }
+
+      if (!zawodnicyInfo[aktywneZawodnik]) {
+        zawodnicyInfo[aktywneZawodnik] = [];
+      }
+      zawodnicyInfo[aktywneZawodnik].push({minuty, testy, ocena});
+      zapiszZawodnicyInfo();
+
+      alert('Dane zawodnika zapisane.');
+      rysujWykresPostepow(aktywneZawodnik);
+    };
+
+    anulujZawodnikBtn.onclick = () => {
+      szczegolyZawodnika.classList.add('d-none');
+      szczegolyDruzyny.classList.remove('d-none');
+    };
+
+    function rysujWykresPostepow(zawodnik) {
+      const dane = zawodnicyInfo[zawodnik] || [];
+      if (chart) chart.destroy();
+
+      if (dane.length === 0) {
+        ctx.clearRect(0, 0, 400, 200);
+        return;
+      }
+
+      const labels = dane.map((_, i) => `Pomiar ${i+1}`);
+      const minuty = dane.map(d => d.minuty);
+      const testy = dane.map(d => d.testy);
+      const ocena = dane.map(d => d.ocena);
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Minuty',
+              data: minuty,
+              borderColor: 'blue',
+              fill: false
+            },
+            {
+              label: 'Testy',
+              data: testy,
+              borderColor: 'green',
+              fill: false
+            },
+            {
+              label: 'Ocena trenera',
+              data: ocena,
+              borderColor: 'red',
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: false,
+          scales: {
+            y: { beginAtZero: true, max: 15 }
+          }
+        }
+      });
+    }
+
+    // Na start pokaż listę drużyn
+    aktualizujListeDruzyn();
+
+  </script>
+
+</body>
+</html>
