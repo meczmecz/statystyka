@@ -1,26 +1,11 @@
-Świetnie! Poniżej znajdziesz kod z **czterema nowymi profesjonalnymi funkcjami**:
-
-1. **Historia występów zawodnika** – po kliknięciu zawodnika pojawia się panel boczny z wykresem i tabelką ostatnich ocen.
-2. **Ranking TOP 5 zawodników drużyny** – każda karta drużyny ma sekcję TOP 5 na podstawie średnich ocen meczowych.
-3. **Podsumowanie sezonu drużyny** – w karcie drużyny podsumuj bilans, liczbę zwycięstw/remisów/porażek, bramki, średnią ocenę meczową.
-6. **Szybki filtr meczów** – nad tabelą meczów pole do filtrowania po drużynie (A/B), wyniku lub dacie.
-
-Poniżej pełny plik z nowymi funkcjami (wszystko w jednym, wystarczy podmienić swój `index.html`).  
-Opis nowych funkcji znajdziesz w komentarzach w kodzie.
-
-```html name=index.html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jaguar Analityka - zarządzanie drużynami i meczami</title>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statystyka Drużyny</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --main: #003366;
@@ -33,12 +18,18 @@ Opis nowych funkcji znajdziesz w komentarzach w kodzie.
       --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1.5px 4px #bbb;
       --table-header: #002244;
     }
-    html, body { margin: 0; padding: 0; background: var(--gray-bg); font-family: 'Montserrat', Arial, sans-serif; }
-    body { min-height: 100vh; }
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: var(--gray-bg);
+      color: #212121;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
     header {
       background: linear-gradient(90deg, var(--main), var(--secondary));
       color: white;
-      padding: 30px 0 18px 0;
+      padding: 32px 0 16px 0;
       text-align: center;
       font-size: 2.2em;
       font-weight: 700;
@@ -46,640 +37,350 @@ Opis nowych funkcji znajdziesz w komentarzach w kodzie.
       box-shadow: var(--shadow);
       border-bottom-left-radius: var(--radius);
       border-bottom-right-radius: var(--radius);
+      display: flex; justify-content: space-between; align-items: center;
     }
+    #toggleTheme {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      margin-right: 32px;
+    }
+    #toggleTheme:hover { color: #ffb400; }
     main {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 32px auto;
       background: var(--card-bg);
-      padding: 32px 28px 40px 28px;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
+      padding: 32px 28px 40px 28px;
     }
-    nav {
-      margin-bottom: 35px;
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-    }
-    nav button {
-      padding: 12px 32px;
-      font-size: 1.1em;
-      border-radius: var(--radius);
-      border: none;
-      background: white;
+    .section-title {
       color: var(--main);
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 1px 5px #eee;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      font-size: 1.2rem;
+      margin-top: 2.3rem;
+      margin-bottom: 0.7rem;
       letter-spacing: 0.5px;
-      border: 2px solid var(--main);
-    }
-    nav button.active, nav button:hover {
-      background: var(--main);
-      color: white;
-      box-shadow: 0 2px 10px #dde5ef;
-    }
-    section {
-      margin-bottom: 38px;
-    }
-    h2, h3, h4 {
-      color: var(--main);
-      font-weight: 700;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-      margin-top: 0;
-    }
-    h2 {
-      border-bottom: 3px solid var(--accent);
-      padding-bottom: 4px;
-      font-size: 1.7em;
-    }
-    h3 {
-      font-size: 1.3em;
-      border-bottom: 2px solid var(--gray-bg);
-      margin-bottom: 14px;
-      padding-bottom: 3px;
-    }
-    label {
-      display: block;
-      margin: 9px 0 5px;
       font-weight: 600;
-      color: var(--main);
     }
-    input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea, input[type="date"] {
+    .team-table {
       width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+    .team-table th, .team-table td {
+      border: 1px solid #e0e0e0;
       padding: 10px 12px;
-      border-radius: 6px;
-      border: 1.5px solid #c2cad6;
-      font-size: 1.02em;
-      margin-bottom: 6px;
-      background: #fafdff;
-      transition: border 0.18s;
-      font-family: inherit;
-      box-sizing: border-box;
+      text-align: center;
+      vertical-align: middle;
     }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border: 2px solid var(--accent);
-      background: #fffbe8;
-    }
-    button, .btn {
-      background: var(--main);
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      margin-top: 11px;
-      cursor: pointer;
-      border-radius: var(--radius);
-      font-weight: 700;
-      font-size: 1.06em;
-      transition: background 0.2s;
-      box-shadow: 0 2px 8px #e6eaee;
-      letter-spacing: 0.5px;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-    }
-    button:hover, .btn:hover {
-      background: var(--accent);
+    .team-table th {
+      background: #f0f4fa;
       color: var(--main);
     }
-    .danger { background: var(--danger)!important; }
-    .danger:hover { background: #ff5656!important; color: white!important; }
-    .hidden { display: none; }
-    .card-list { display: flex; flex-wrap: wrap; gap: 25px; margin: 14px 0 0 0; }
-    .team-card {
-      flex: 1 1 290px;
-      min-width: 290px;
-      max-width: 350px;
-      background: linear-gradient(120deg, #fff, #f4f7fa 80%);
-      border-radius: var(--radius);
-      box-shadow: 0 1.5px 7px #e3e8ef, 0 0.5px 2px #ddd;
-      padding: 24px 18px 16px 18px;
-      margin-bottom: 7px;
-      position: relative;
-      border: 2.5px solid var(--main);
-      transition: box-shadow 0.2s, border 0.2s;
-      overflow: hidden;
-    }
-    .team-card:hover {
-      box-shadow: 0 4px 16px #b6c8e7;
-      border: 2.5px solid var(--accent);
-    }
-    .team-card h4 {
-      color: var(--accent);
-      font-size: 1.18em;
-      margin-top: 0;
-      margin-bottom: 5px;
-      font-weight: 700;
-      text-shadow: 0 0.8px 0 #fff;
-      letter-spacing: 0.2px;
-    }
-    .team-actions {
-      position: absolute;
-      top: 14px;
-      right: 18px;
-      display: flex;
-      gap: 9px;
-    }
-    .team-actions button {
-      background: none;
-      color: var(--main);
-      border: none;
-      padding: 0;
-      box-shadow: none;
-      font-size: 1.1em;
-    }
-    .team-actions button:hover { color: var(--accent); }
-    .team-players {
-      margin-top: 10px;
-      margin-bottom: 0;
-      padding: 0;
-      list-style: none;
-      font-size: 1em;
-    }
-    .team-players li {
-      margin-bottom: 4px;
-      padding: 5px 0 5px 3px;
-      border-bottom: 1px solid #ececec;
-      transition: background 0.1s;
-      cursor: pointer;
-      border-radius: 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .team-players li:hover { background: #f2f7ff; }
-    .player-edit-btn {
-      background: none; border: none; color: var(--accent); font-size: 0.95em; cursor: pointer; margin-left: 5px;
-    }
-    .player-edit-btn:hover { color: var(--danger); }
-    .add-player-row { margin-top: 10px; display: flex; gap: 7px; align-items: center; }
-    .add-player-row input { flex: 1 1 auto; margin-bottom: 0; }
-    /* Nowe: ranking */
-    .top5-list {
-      margin: 10px 0 11px 0;
-      padding: 0;
-      list-style: none;
-    }
-    .top5-list li {
-      font-size: 1.09em;
-      padding: 3px 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .top5-list .fa-crown { color: gold; margin-right: 2px; }
-    .team-summary {
-      background: #f9f4e7;
-      border-radius: 9px;
-      padding: 8px 13px;
-      font-size: 0.98em;
-      margin-bottom: 7px;
-      box-shadow: 0 1px 4px #e7e1c1;
-    }
-    .summary-item { margin-right: 9px; font-weight: 600; }
-    /* Panel boczny zawodnika */
-    #playerHistoryPanel {
-      position: fixed;
-      top: 70px;
-      right: 30px;
-      width: 370px;
-      max-width: 97vw;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 7px 32px #bacee8;
-      z-index: 1000;
-      padding: 24px 18px 14px 18px;
-      animation: fadein 0.22s;
-    }
-    #playerHistoryPanel h4 { margin-top: 0; }
-    #playerHistoryPanel .close-btn {
-      position: absolute;
-      top: 9px;
-      right: 13px;
-      background: none;
-      border: none;
-      color: #aaa;
-      font-size: 1.3em;
-      cursor: pointer;
-    }
-    #playerHistoryPanel .close-btn:hover { color: var(--danger);}
-    #playerHistoryPanel table {
-      width: 100%;
-      font-size: 0.98em;
-      margin-top: 10px;
-      border-collapse: collapse;
-    }
-    #playerHistoryPanel th, #playerHistoryPanel td {
-      border-bottom: 1px solid #ececec;
-      padding: 6px 5px;
-      text-align: left;
-    }
-    #playerHistoryPanel th { background: #eaf2ff; }
-    /* Matches Table */
-    .matches-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .matches-filters input, .matches-filters select {
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: 1.5px solid #c2cad6;
-      font-size: 1em;
-      background: #fafdff;
-    }
-    #matchesTable {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 1em;
-      background: white;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 2px 6px #e1e6ef;
-    }
-    #matchesTable th, #matchesTable td {
-      border-bottom: 1.5px solid #e5e5ef;
-      padding: 14px 8px 11px 8px;
-      text-align: left;
-      font-weight: 500;
-    }
-    #matchesTable th {
-      background: var(--table-header);
-      color: #fff;
-      font-size: 1.09em;
-      letter-spacing: 0.5px;
-    }
-    #matchesTable tr:last-child td { border-bottom: none; }
-    #matchesTable td {
-      background: #fafdff;
-      vertical-align: top;
-    }
-    #matchesTable tr:hover td { background: #f3f6fa; }
-    .form-row {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-    .form-col { flex: 1 1 210px; min-width: 200px; }
-    .match-star {
-      color: gold; margin-right: 2px; font-size: 1.17em;
-      filter: drop-shadow(0 0 2px #fff3);
-    }
-    .tag {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--main);
-      border-radius: 8px;
-      padding: 2px 10px;
-      font-size: 0.97em;
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--main);
       margin-right: 5px;
-      margin-bottom: 2px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
+      vertical-align: middle;
+      background: #eee;
     }
-    #authMessage { color: var(--danger); margin-top: 12px; text-align: center; font-weight: 700; }
-    @media (max-width: 900px) {
-      main { padding: 12px 7px 25px 7px; }
-      .card-list { flex-direction: column; align-items: stretch; }
-      .team-card { max-width: 100%; }
-      #matchesTable thead { display: none; }
-      #matchesTable tr { display: block; margin-bottom: 18px; border-radius: var(--radius); box-shadow: 0 1px 5px #e2edf4; }
-      #matchesTable td {
-        display: flex;
-        align-items: center;
-        padding: 12px 5px;
-        border: none;
-        border-bottom: 1px solid #e1e6ef;
-      }
-      #matchesTable td:before {
-        content: attr(data-label);
-        flex: 0 0 112px;
-        font-weight: 700;
-        color: var(--main);
-        margin-right: 8px;
-        font-size: 0.99em;
-      }
+    /* DARK MODE */
+    body.dark {
+      background: #191c24;
+      color: #e2e6f2;
+    }
+    body.dark main { background: #232841; }
+    body.dark header { background: linear-gradient(90deg, #111827, #003366); }
+    body.dark .section-title { color: var(--accent); }
+    body.dark .team-table th { background: #232841; color: var(--accent); }
+    body.dark .team-table td { background: #24283b; color: #e2e6f2; }
+    body.dark input, body.dark select, body.dark textarea {
+      background: #232841;
+      color: #e2e6f2;
+      border-color: #3b4252;
+    }
+    /* Przyciski */
+    .btn {
+      background: var(--main);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 1rem;
+      margin-top: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-right: 8px;
+    }
+    .btn:hover {
+      background: var(--secondary);
+    }
+    .btn-small {
+      padding: 3px 7px;
+      font-size: 0.9em;
+      margin: 0 2px;
+    }
+    .export-btn {
+      float: right;
+      margin-bottom: 1rem;
+    }
+    /* Toasty */
+    #toast {
+      visibility: hidden;
+      min-width: 220px;
+      background-color: #336699;
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 14px;
+      position: fixed;
+      z-index: 999;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-size: 1rem;
+      transition: visibility 0s, opacity 0.4s;
+      opacity: 0;
+    }
+    #toast.show {
+      visibility: visible;
+      opacity: 0.98;
+      animation: fadeInOut 2.3s;
+    }
+    @keyframes fadeInOut {
+      0% { bottom: 0; opacity: 0;}
+      10% { bottom: 30px; opacity: 0.98;}
+      80% { bottom: 30px; opacity: 0.98;}
+      100% { bottom: 0; opacity: 0;}
+    }
+    .comments-section {
+      margin-top: 0.7rem;
+      margin-bottom: 1.5rem;
+      background: #f5f6fa;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.97em;
+    }
+    body.dark .comments-section { background: #232841; }
+    /* Kalendarz placeholder */
+    .calendar-placeholder {
+      margin: 1.2rem 0;
+      background: #f0f4fa;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-style: italic;
+    }
+    body.dark .calendar-placeholder { background: #232841; color: #aaa; }
+    /* TOP3 */
+    .ranking-section { margin: 2em 0 2.5em 0; }
+    .ranking-section ol { padding-left: 24px; }
+    .ranking-section li { font-size: 1.16em; margin-bottom: 8px; display:flex; align-items:center; }
+    .ranking-section .avatar { width: 32px; height: 32px; margin-right: 7px; }
+    /* Responsive */
+    @media(max-width:700px) {
+      main { padding: 1rem; }
+      header { flex-direction: column; gap: 0.5rem; }
+      .export-btn { float: none; display: block; margin: 0 auto 1rem auto; }
     }
   </style>
 </head>
 <body>
-<!-- ...KONTYNUACJA KODU... -->
-      playersData = {};
-    matchesData = {};
-    if (trainingChart) trainingChart.destroy();
-    if (matchChart) matchChart.destroy();
-  }
+  <header>
+    <span>
+      <i class="fas fa-futbol"></i> Statystyka Drużyny
+    </span>
+    <button id="toggleTheme" title="Zmień motyw"><i class="fas fa-moon"></i></button>
+  </header>
+  <main>
+    <button class="btn export-btn" onclick="exportTableToCSV('statystyki.csv')"><i class="fas fa-file-csv"></i> Eksportuj do CSV</button>
+    <h2 class="section-title">Tabela Drużyny</h2>
+    <table class="team-table" id="teamTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Zawodnik</th>
+          <th>Bramki</th>
+          <th>Asysty</th>
+          <th>Ocena</th>
+          <th>Awatar</th>
+          <th>Komentarze</th>
+          <th>Akcje</th>
+        </tr>
+      </thead>
+      <tbody id="teamBody">
+        <!-- Zawodnicy będą tutaj dodawani dynamicznie -->
+      </tbody>
+    </table>
+        <h2 class="section-title">Dodaj zawodnika</h2>
+    <form id="playerForm" autocomplete="off">
+      <input type="text" id="name" placeholder="Imię i nazwisko" required>
+      <input type="number" id="goals" placeholder="Bramki" min="0" required>
+      <input type="number" id="assists" placeholder="Asysty" min="0" required>
+      <input type="number" id="rating" placeholder="Ocena" step="0.1" min="0" max="10" required>
+      <input type="url" id="avatar" placeholder="Link do awataru (opcjonalnie)">
+      <button class="btn" type="submit">Dodaj</button>
+    </form>
 
-  // --- Nowa Funkcja: Historia występów zawodnika (panel boczny) ---
-  let playerHistoryPanel = null;
-  function showPlayerHistoryPanel(teamId, playerId, playerData) {
-    // Zamknij poprzedni panel
-    if (playerHistoryPanel && playerHistoryPanel.parentNode) playerHistoryPanel.parentNode.removeChild(playerHistoryPanel);
+    <section class="ranking-section">
+      <h2 class="section-title"><i class="fas fa-crown"></i> Najlepsi zawodnicy (TOP3)</h2>
+      <ol id="topPlayers"></ol>
+    </section>
 
-    playerHistoryPanel = document.createElement('div');
-    playerHistoryPanel.id = 'playerHistoryPanel';
-    playerHistoryPanel.innerHTML = `
-      <button class="close-btn"><i class="fas fa-times"></i></button>
-      <h4><i class="fa-solid fa-user"></i> ${playerData.name}</h4>
-      <div id="playerHistoryStats"></div>
-      <canvas id="playerHistoryChart" width="320" height="100" style="margin:12px 0 7px 0;"></canvas>
-      <table>
-        <thead><tr><th>Data</th><th>Trening</th><th>Mecz</th></tr></thead>
-        <tbody id="playerHistoryTable"></tbody>
-      </table>
-    `;
-    document.body.appendChild(playerHistoryPanel);
-
-    playerHistoryPanel.querySelector('.close-btn').onclick = () => {
-      playerHistoryPanel.parentNode.removeChild(playerHistoryPanel);
-    };
-
-    // Pobierz i wyświetl dane
-    let trainingArr = [];
-    let matchArr = [];
-    // Zbierz daty oraz wartości ocen
-    for (const [date, val] of Object.entries(playerData.trainingScores || {})) {
-      trainingArr.push({date, val: parseFloat(val)});
+    <h2 class="section-title">Kalendarz meczów</h2>
+    <div class="calendar-placeholder">
+      (Tu w przyszłości pojawi się kalendarz meczów!)
+    </div>
+    <h2 class="section-title">Statystyki wizualne</h2>
+    <div class="calendar-placeholder">
+      (Tu możesz dodać wykresy – np. radarowe porównujące zawodników, słupkowe, itp.)
+    </div>
+  </main>
+  <div id="toast"></div>
+  <script>
+    // DARK MODE
+    const toggleThemeBtn = document.getElementById('toggleTheme');
+    toggleThemeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      toggleThemeBtn.innerHTML = isDark
+        ? '<i class="fas fa-sun"></i>'
+        : '<i class="fas fa-moon"></i>';
+    });
+    // Ustawienie motywu po odświeżeniu
+    if(localStorage.getItem('theme')==='dark') {
+      document.body.classList.add('dark');
+      toggleThemeBtn.innerHTML = '<i class="fas fa-sun"></i>';
     }
-    for (const [date, val] of Object.entries(playerData.matchScores || {})) {
-      matchArr.push({date, val: parseFloat(val)});
-    }
-    // Sortuj po dacie (klucz jest losowy, więc niekoniecznie data, ale zachowaj najnowsze)
-    trainingArr = trainingArr.reverse().slice(0,5);
-    matchArr = matchArr.reverse().slice(0,5);
 
-    // Uśrednij
-    let avgTraining = trainingArr.length ? (trainingArr.map(x=>x.val).reduce((a,b)=>a+b,0)/trainingArr.length).toFixed(2) : "-";
-    let avgMatch = matchArr.length ? (matchArr.map(x=>x.val).reduce((a,b)=>a+b,0)/matchArr.length).toFixed(2) : "-";
-
-    playerHistoryPanel.querySelector('#playerHistoryStats').innerHTML =
-      `<b>Śr. trening:</b> ${avgTraining} &emsp; <b>Śr. mecz:</b> ${avgMatch} &emsp; <b>Meczy:</b> ${matchArr.length}`;
-
-    // Wykres
-    const chartCtx = playerHistoryPanel.querySelector('#playerHistoryChart').getContext('2d');
-    let chartLabels = [];
-    let chartDataT = [], chartDataM = [];
-    for (let i=0; i<5; ++i) {
-      chartLabels.push(i+1);
-      chartDataT.push(trainingArr[i]?.val || null);
-      chartDataM.push(matchArr[i]?.val || null);
-    }
-    new Chart(chartCtx, {
-      type: 'line',
-      data: {
-        labels: chartLabels,
-        datasets: [
-          {label:'Trening', data: chartDataT, borderColor:'#003366', backgroundColor:'#e6f1ff', tension:0.15},
-          {label:'Mecz', data: chartDataM, borderColor:'#ffb400', backgroundColor:'#fff3cf', tension:0.15}
-        ]
+    // Dane zawodników
+    let players = [
+      {
+        name: "Jan Kowalski",
+        goals: 5,
+        assists: 3,
+        rating: 8.3,
+        avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+        comments: ["MVP ostatniego meczu!", "Super gra w obronie."]
       },
-      options: { plugins:{legend:{display:true}}, scales:{y:{min:0,max:10}} }
-    });
-
-    // Tabela
-    const tbody = playerHistoryPanel.querySelector('#playerHistoryTable');
-    for (let i=0; i<5; ++i) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${i+1}</td>
-        <td>${trainingArr[i]?.val!==undefined ? trainingArr[i].val : '-'}</td>
-        <td>${matchArr[i]?.val!==undefined ? matchArr[i].val : '-'}</td>`;
-      tbody.appendChild(tr);
-    }
-  }
-
-  // Nadpisz showPlayerDetails, by otwierał też historię!
-  function showPlayerDetails(teamId, playerId, playerData) {
-    showPlayerHistoryPanel(teamId, playerId, playerData);
-  }
-
-  // --- Ranking TOP 5 i podsumowanie sezonu w kartach drużyn ---
-  function loadTeams() {
-    db.ref('teams').once('value').then(snapshot => {
-      teamsData = snapshot.val() || {};
-      teamsList.innerHTML = '';
-      teamASelect.innerHTML = '';
-      chartTeamSelect.innerHTML = '';
-
-      for (const id in teamsData) {
-        const teamDiv = document.createElement('div');
-        teamDiv.className = 'team-card';
-        const name = teamsData[id].name;
-
-        // --- Ranking oraz podsumowanie ---
-        let top5Html = `<div style="margin:8px 0 0 0"><b><i class="fa fa-crown"></i> TOP 5 zawodników</b> <ul class="top5-list" id="top5_${id}"></ul></div>`;
-        let summaryHtml = `<div class="team-summary" id="teamSummary_${id}"></div>`;
-
-        teamDiv.innerHTML = `
-          <div class="team-actions">
-            <button title="Edytuj" onclick="event.stopPropagation();window.editTeam('${id}','${name.replace(/'/g,"\\'")}')"><i class="fa-solid fa-pen"></i></button>
-            <button title="Usuń" class="danger" onclick="event.stopPropagation();window.deleteTeam('${id}')"><i class="fa-solid fa-trash"></i></button>
-          </div>
-          <h4><i class="fas fa-shield"></i> ${name}</h4>
-          ${summaryHtml}
-          ${top5Html}
-          <div><b>Zawodnicy:</b></div>
-          <ul class="team-players" id="playersList_${id}"></ul>
-          <form class="add-player-row" id="playerForm_${id}">
-            <input type="text" name="playerNameInput" required placeholder="Imię i nazwisko zawodnika"/>
-            <button type="submit"><i class="fa fa-plus"></i></button>
-          </form>
-        `;
-        teamsList.appendChild(teamDiv);
-
-        // Załaduj zawodników do karty
-        db.ref(`players/${id}`).once('value').then(snap => {
-          const players = snap.val() || {};
-          const list = teamDiv.querySelector(`#playersList_${id}`);
-          for (const pid in players) {
-            const li = document.createElement('li');
-            li.innerHTML = `<span>${players[pid].name}</span>
-              <button class="player-edit-btn" title="Edytuj" onclick="event.stopPropagation();window.editPlayer('${id}','${pid}','${players[pid].name.replace(/'/g,"\\'")}')"><i class="fa fa-pen"></i></button>`;
-            li.addEventListener('click', () => showPlayerHistoryPanel(id, pid, players[pid]));
-            list.appendChild(li);
-          }
-          // --- Ranking: TOP 5 zawodników tej drużyny ---
-          let avgArr = [];
-          for (const pid in players) {
-            const ms = Object.values(players[pid].matchScores||{});
-            const avg = ms.length ? ms.reduce((a,b)=>a+b,0)/ms.length : 0;
-            avgArr.push({name:players[pid].name, avg:avg});
-          }
-          avgArr = avgArr.filter(x=>x.avg>0).sort((a,b)=>b.avg-a.avg).slice(0,5);
-          const top5List = teamDiv.querySelector(`#top5_${id}`);
-          if (avgArr.length === 0)
-            top5List.innerHTML = `<li>Brak danych</li>`;
-          else
-            avgArr.forEach((x,i) => {
-              top5List.innerHTML += `<li>${i===0?'<i class="fa fa-crown"></i>':''} <b>${x.name}</b> <span style="color:#ffb400">${x.avg.toFixed(2)}</span></li>`;
-            });
-        });
-
-        // --- Podsumowanie sezonu tej drużyny ---
-        db.ref('matches').once('value').then(matchesSnap => {
-          const matches = matchesSnap.val() || {};
-          let wins=0, draws=0, losses=0, goalsFor=0, goalsAgainst=0, matchCount=0, sumRatings=0, ratingsCount=0;
-          for (const mid in matches) {
-            const m = matches[mid];
-            let isA = m.teamA === id;
-            let isB = (m.teamBName||'') === name;
-            if (isA || isB) {
-              let [gf,ga] = (m.score||"").split(":").map(s=>parseInt(s)||0);
-              if (isB) [gf,ga]=[ga,gf];
-              goalsFor += gf; goalsAgainst += ga;
-              if (gf>ga) wins++; else if (gf===ga) draws++; else losses++;
-              if (m.matchRating!==undefined && m.matchRating!==null) {
-                sumRatings += parseFloat(m.matchRating);
-                ratingsCount++;
-              }
-              matchCount++;
-            }
-          }
-          const summary = teamDiv.querySelector(`#teamSummary_${id}`);
-          summary.innerHTML = `
-            <span class="summary-item">Mecze: ${matchCount}</span>
-            <span class="summary-item" style="color:#14a814">Zwycięstw: ${wins}</span>
-            <span class="summary-item">Remisów: ${draws}</span>
-            <span class="summary-item" style="color:#d13f3f">Porażek: ${losses}</span>
-            <span class="summary-item">Bramki: ${goalsFor}:${goalsAgainst}</span>
-            <span class="summary-item">Śr. ocena meczu: <b>${ratingsCount? (sumRatings/ratingsCount).toFixed(2):'-'}</b></span>
-          `;
-        });
-
-        // Dodawanie zawodnika
-        teamDiv.querySelector(`#playerForm_${id}`).addEventListener('submit', function(e) {
-          e.preventDefault();
-          const playerName = this.playerNameInput.value.trim();
-          if (!playerName) return alert('Podaj imię i nazwisko zawodnika');
-          db.ref(`players/${id}`).push({
-            name: playerName,
-            trainingScores: {},
-            matchScores: {}
-          }).then(() => {
-            this.playerNameInput.value = '';
-            loadTeams();
-          });
-        });
-
-        // Opcje do selectów
-        const optionA = document.createElement('option');
-        optionA.value = id;
-        optionA.textContent = name;
-        teamASelect.appendChild(optionA);
-
-        const optionChart = document.createElement('option');
-        optionChart.value = id;
-        optionChart.textContent = name;
-        chartTeamSelect.appendChild(optionChart);
+      {
+        name: "Piotr Nowak",
+        goals: 2,
+        assists: 5,
+        rating: 7.5,
+        avatar: "",
+        comments: ["Dobra asysta!", "Pracowity na treningach."]
       }
-      updateJaguarBestPlayers();
-    }).catch(err => alert('Błąd wczytywania drużyn: ' + err.message));
-  }
-  window.editTeam = editTeam;
-  window.deleteTeam = deleteTeam;
-  window.editPlayer = editPlayer;
+    ];
 
-  // --- Szybki filtr meczów ---
-  // Dodaj filtry nad tabela
-  let matchesFilterDiv = null;
-  function renderMatchesFilters() {
-    if (matchesFilterDiv && matchesFilterDiv.parentNode) matchesFilterDiv.parentNode.removeChild(matchesFilterDiv);
-    matchesFilterDiv = document.createElement('div');
-    matchesFilterDiv.className = 'matches-filters';
-    matchesFilterDiv.innerHTML = `
-      <input id="matchDateFilter" type="date" placeholder="Data meczu" />
-      <input id="matchTeamAFilter" type="text" placeholder="Drużyna A" />
-      <input id="matchTeamBFilter" type="text" placeholder="Drużyna B" />
-      <input id="matchScoreFilter" type="text" placeholder="Wynik (np. 2:1)" />
-      <button id="resetMatchesFilters" type="button"><i class="fa fa-xmark"></i> Reset</button>
-    `;
-    const matchesSection = document.getElementById('matches');
-    matchesSection.insertBefore(matchesFilterDiv, matchesSection.querySelector('table'));
-    document.getElementById('resetMatchesFilters').onclick = () => {
-      document.getElementById('matchDateFilter').value = '';
-      document.getElementById('matchTeamAFilter').value = '';
-      document.getElementById('matchTeamBFilter').value = '';
-      document.getElementById('matchScoreFilter').value = '';
-      loadMatches();
-    };
-    document.querySelectorAll('.matches-filters input').forEach(inp => {
-      inp.addEventListener('input', loadMatches);
+    // Toast
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.innerHTML = msg;
+      toast.className = "show";
+      setTimeout(()=>toast.className = toast.className.replace("show",""), 2000);
+    }
+
+    // Render zawodników
+    function renderPlayers() {
+      const tbody = document.getElementById('teamBody');
+      tbody.innerHTML = "";
+      players.forEach((p, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${idx+1}</td>
+          <td>${p.name}</td>
+          <td>${p.goals}</td>
+          <td>${p.assists}</td>
+          <td>${p.rating}</td>
+          <td>${p.avatar ? `<img class="avatar" src="${p.avatar}" alt="avatar">` : '<i class="fas fa-user-circle fa-2x" style="color:#aaa"></i>'}</td>
+          <td>
+            <div class="comments-section" id="comments-${idx}">
+              ${p.comments.map(c=>`<div>• ${c}</div>`).join('')}
+              <form onsubmit="return addComment(event,${idx})" style="margin-top:5px;">
+                <input type="text" placeholder="Dodaj komentarz..." id="input-comment-${idx}" style="width:65%;padding:3px;" maxlength="80" required>
+                <button class="btn btn-small" style="padding:4px 9px;font-size:0.93em" type="submit"><i class="fas fa-plus"></i></button>
+              </form>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-small" onclick="removePlayer(${idx})" title="Usuń zawodnika"><i class="fas fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      renderTopPlayers();
+    }
+
+    // Dodawanie zawodnika
+    document.getElementById('playerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const goals = parseInt(document.getElementById('goals').value);
+      const assists = parseInt(document.getElementById('assists').value);
+      const rating = parseFloat(document.getElementById('rating').value);
+      const avatar = document.getElementById('avatar').value.trim();
+      players.push({name, goals, assists, rating, avatar, comments: []});
+      renderPlayers();
+      showToast("Dodano zawodnika!");
+      this.reset();
     });
-  }
 
-  // WCZYTAJ MECZE z filtrami
-  function loadMatches() {
-    db.ref('matches').once('value')
-      .then(snapshot => {
-        if (!matchesFilterDiv) renderMatchesFilters();
-        matchesTableBody.innerHTML = '';
-        const matches = snapshot.val() || {};
-        // Potrzebne dane zawodników do szybkiego wyciągania nazw
-        let allPlayers = {};
-        db.ref('players').once('value').then(playersSnap => {
-          allPlayers = playersSnap.val() || {};
-          // Pobierz filtry
-          const dateF = document.getElementById('matchDateFilter')?.value || '';
-          const teamAF = document.getElementById('matchTeamAFilter')?.value?.toLowerCase() || '';
-          const teamBF = document.getElementById('matchTeamBFilter')?.value?.toLowerCase() || '';
-          const scoreF = document.getElementById('matchScoreFilter')?.value || '';
-          for (const matchId in matches) {
-            const match = matches[matchId];
-            // Filtrowanie
-            if (dateF && match.date !== dateF) continue;
-            if (teamAF && !(teamsData[match.teamA]?.name?.toLowerCase()||'').includes(teamAF)) continue;
-            if (teamBF && !(match.teamBName?.toLowerCase()||'').includes(teamBF)) continue;
-            if (scoreF && !(match.score||'').includes(scoreF)) continue;
+    // Ranking TOP3
+    function renderTopPlayers() {
+      const top = [...players].sort((a,b)=>b.rating-a.rating).slice(0,3);
+      const list = document.getElementById("topPlayers");
+      list.innerHTML = top.map(p=>`<li>${p.avatar?`<img class="avatar" src="${p.avatar}" alt="avatar"/>`:''}${p.name} – <b>${p.rating}</b></li>`).join('');
+    }
 
-            const tr = document.createElement('tr');
-            // Nazwiska Jaguar
-            let jaguarNames = [];
-            let jaguarRatings = [];
-            if (match.jaguarBestPlayers && Array.isArray(match.jaguarBestPlayers)) {
-              jaguarNames = match.jaguarBestPlayers.map(pid => {
-                const n = allPlayers[match.teamA]?.[pid]?.name;
-                return n ? `<span class="tag">${n}</span>` : `<span class="tag">${pid}</span>`;
-              });
-              jaguarRatings = (match.jaguarPlayersRatings || []).map(r => r !== null && r !== undefined && r!=='' ? r : '-');
-            }
-            let opponentNames = (match.opponentBestPlayers || []).map(n => n ? `<span class="tag">${n}</span>` : '-');
-            let opponentRatings = (match.opponentPlayersRatings || []).map(r => r !== null && r !== undefined && r!=='' ? r : '-');
+    // Dodawanie komentarza
+    window.addComment = function(e,idx) {
+      e.preventDefault();
+      const inp = document.getElementById(`input-comment-${idx}`);
+      const val = inp.value.trim();
+      if(val) {
+        players[idx].comments.push(val);
+        renderPlayers();
+        showToast("Dodano komentarz!");
+      }
+      return false;
+    }
 
-            tr.innerHTML = `
-              <td data-label="Data">${match.date}</td>
-              <td data-label="Drużyna A">${teamsData[match.teamA]?.name || ''}</td>
-              <td data-label="Drużyna B">${match.teamBName || ''}</td>
-              <td data-label="Wynik">${match.score}</td>
-              <td data-label="Najlepsi Jaguar">${jaguarNames.join('<br>')}</td>
-              <td data-label="Oceny Jaguar">${jaguarRatings.join('<br>')}</td>
-              <td data-label="Najlepsi przeciwnik">${opponentNames.join('<br>')}</td>
-              <td data-label="Oceny przeciwnik">${opponentRatings.join('<br>')}</td>
-              <td data-label="Ocena meczu">${match.matchRating !== undefined && match.matchRating !== null ? `<span class="match-star"><i class="fas fa-star"></i></span> ${match.matchRating}` : '-'}</td>
-            `;
-            const tdAct = document.createElement('td');
-            const delBtn = document.createElement('button');
-            delBtn.textContent = 'Usuń';
-            delBtn.className = 'danger';
-            delBtn.addEventListener('click', () => {
-              if (confirm('Na pewno usunąć ten mecz?')) {
-                db.ref(`matches/${matchId}`).remove().then(loadMatches).catch(err => alert('Błąd usuwania meczu: ' + err.message));
-              }
-            });
-            tdAct.appendChild(delBtn);
-            tr.appendChild(tdAct);
-            matchesTableBody.appendChild(tr);
-          }
-        });
-      })
-      .catch(err => alert('Błąd wczytywania meczów: ' + err.message));
-  }
+    // Usuwanie zawodnika
+    window.removePlayer = function(idx) {
+      if(confirm("Czy na pewno chcesz usunąć tego zawodnika?")) {
+        players.splice(idx,1);
+        renderPlayers();
+        showToast("Usunięto zawodnika!");
+      }
+    }
 
-  // ...reszta kodu (pozostałe funkcje - wykresy itp. - zostaje bez zmian)...
+    // Eksport do CSV
+    window.exportTableToCSV = function(filename) {
+      let csv = "Imię i nazwisko,Bramki,Asysty,Ocena,Link do awataru\n";
+      players.forEach(p=>{
+        csv += `"${p.name}",${p.goals},${p.assists},${p.rating},"${p.avatar}"\n`;
+      });
+      const blob = new Blob([csv], {type: 'text/csv'});
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast("Wyeksportowano do CSV!");
+    }
 
-</script>
+    // Pierwszy render
+    renderPlayers();
+  </script>
 </body>
 </html>
