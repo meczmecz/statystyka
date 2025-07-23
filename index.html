@@ -643,13 +643,24 @@ const sections = {
 if (player.temporaryTransfer) {
   playerName += ` (→ wypożyczony do innej drużyny)`;
 }
-li.textContent = playerName;
+const li = document.createElement('li');
 
-  <button class="player-edit-btn" title="Edytuj" onclick="event.stopPropagation();window.editPlayer('${id}','${pid}','${players[pid].name.replace(/'/g,"\\'")}')"><i class="fa fa-pen"></i></button>
-  <button class="player-remove-btn" title="Usuń" onclick="event.stopPropagation();window.removePlayer('${id}','${pid}')"><i class="fa fa-trash"></i></button>
+let playerName = players[pid].name;
+if (players[pid].temporaryTransfer) {
+  playerName += ` (→ wypożyczony do innej drużyny)`;
+}
+
+li.innerHTML = `
+  <span>${playerName}</span>
+  <span>
+    <button class="player-edit-btn" title="Edytuj" onclick="event.stopPropagation();window.editPlayer('${id}','${pid}','${players[pid].name.replace(/'/g,"\\'")}')"><i class="fa fa-pen"></i></button>
+    <button class="player-remove-btn" title="Usuń" onclick="event.stopPropagation();window.removePlayer('${id}','${pid}')"><i class="fa fa-trash"></i></button>
+  </span>
 `;
+
 li.addEventListener('click', () => showPlayerDetails(id, pid, players[pid]));
 list.appendChild(li);
+
             }
           });
 
