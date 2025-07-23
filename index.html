@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -12,144 +13,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     :root {
-      --main: #003366;
-      --accent: #ffb400;
-      --gray-bg: #f4f7fa;
-      --card-bg: #fff;
-      --secondary: #0055aa;
-      --danger: #cc3333;
-      --radius: 12px;
-      --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1.5px 4px #bbb;
-      --table-header: #002244;
-      --toast-bg: #fff;
-      --toast-color: #003366;
-    }
-    html, body { margin: 0; padding: 0; background: var(--gray-bg); font-family: 'Montserrat', Arial, sans-serif; }
-    body { min-height: 100vh; }
-    header {
-      background: linear-gradient(90deg, var(--main), var(--secondary));
-      color: white;
-      padding: 30px 0 18px 0;
-      text-align: center;
-      font-size: 2.2em;
-      font-weight: 700;
-      letter-spacing: 2px;
-      box-shadow: var(--shadow);
-      border-bottom-left-radius: var(--radius);
-      border-bottom-right-radius: var(--radius);
-      position: relative;
-    }
-    /* Tryb ciemny */
-    body.dark {
-      --main: #d8e5fa;
-      --accent: #ffd966;
-      --gray-bg: #222d3a;
-      --card-bg: #24344a;
-      --secondary: #3069aa;
-      --danger: #ff5555;
-      --table-header: #19304e;
-      --toast-bg: #24344a;
-      --toast-color: #ffd966;
-      color: #e3e6ed;
-    }
-    body.dark header {
-      color: #fff;
-      background: linear-gradient(90deg, #16233a, #3069aa);
-    }
-    body.dark input, body.dark select, body.dark textarea {
-      background: #192434 !important;
-      color: #e3e6ed !important;
-      border-color: #395077 !important;
-    }
-    body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
-      background: #222f48 !important;
-      border-color: #ffd966 !important;
-    }
-    body.dark .team-card { background: linear-gradient(120deg, #24344a, #192434 80%); }
-    body.dark .team-card, body.dark .player-detail-card, body.dark #matchesTable td, body.dark #matchesTable, body.dark main {
-      box-shadow: 0 4px 16px #111a2f;
-      border-color: #ffd966;
-    }
-    body.dark .player-detail-card { background: #192434; }
-    body.dark .tag { background: #ffd966; color: #24344a;}
-    body.dark #matchesTable th { background: #19304e; color: #ffd966; }
-    body.dark #matchesTable td { background: #222d3a; color: #ffd966; }
-    /* Toast */
-    #toast {
-      position: fixed;
-      top: 25px;
-      right: 40px;
-      background: var(--toast-bg);
-      color: var(--toast-color);
-      padding: 15px 28px;
-      border-radius: 8px;
-      box-shadow: 0 2px 14px #4448;
-      font-weight: 700;
-      z-index: 9999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s, top 0.35s;
-      font-size: 1.06em;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-    #toast.show { opacity: 1; pointer-events: auto; top: 55px;}
-    #darkModeToggle {
-      position: absolute;
-      top: 18px;
-      right: 24px;
-      background: var(--card-bg);
-      color: var(--main);
-      border: 2px solid var(--main);
-      border-radius: 50%;
-      width: 38px;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.36em;
-      transition: background 0.2s, color 0.2s;
-      z-index: 10;
-      box-shadow: 0 2px 8px #0001;
-    }
-    #darkModeToggle:hover {
-      background: var(--main);
-      color: var(--accent);
-    }
-    /* Kalendarz */
-    #calendarSection { margin-bottom: 30px; }
-    .calendar-table {
-      width: 100%; background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow);
-      border-collapse: collapse; margin-top: 10px; color: inherit;
-    }
-    .calendar-table th, .calendar-table td {
-      border: 1px solid #eee;
-      text-align: center;
-      padding: 10px;
-      font-size: 1.1em;
-      min-width: 40px;
-      height: 40px;
-      vertical-align: middle;
-      cursor: pointer;
-      transition: background 0.13s;
-    }
-    .calendar-table th { background: var(--accent); color: var(--main); }
-    .calendar-table td:hover { background: #e0e6f7; }
-    body.dark .calendar-table th { background: #ffd966; color: #222d3a; }
-    body.dark .calendar-table td:hover { background: #343f59; }
-    .calendar-match {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--main);
-      border-radius: 7px;
-      padding: 2px 8px;
-      margin-top: 4px;
-      font-size: 0.97em;
-      font-weight: 700;
-    }
-     :root {
       --main: #003366;
       --accent: #ffb400;
       --gray-bg: #f4f7fa;
@@ -434,19 +297,13 @@
         font-size: 0.99em;
       }
     }
-    /* Pozostałe style z Twojego kodu: NIE USUWAJ! */
-    /* ...TU WKLEJ WSZYSTKIE STYLE Z TWOJEGO PIERWOWZORU... */
-    /* (Dla czytelności, tutaj pominięte, ale w praktyce nie usuwaj żadnego ze swoich stylów!) */
   </style>
 </head>
 <body>
-<header>
-  <i class="fas fa-futbol"></i> Jaguar Analityka <span style="font-size:0.7em;font-weight:400;">zarządzanie drużynami i meczami</span>
-  <button id="darkModeToggle" title="Tryb ciemny/jasny"><i class="fa fa-moon"></i></button>
-</header>
+
+<header><i class="fas fa-futbol"></i> Jaguar Analityka <span style="font-size:0.7em;font-weight:400;">zarządzanie drużynami i meczami</span></header>
 <main>
   <!-- LOGOWANIE -->
-  <!-- ... Twój kod logowania ... -->
   <section id="loginSection">
     <h2><i class="fas fa-right-to-bracket"></i> Logowanie</h2>
     <form id="loginForm">
@@ -458,15 +315,16 @@
     </form>
     <div id="authMessage"></div>
   </section>
+
   <nav id="mainNav" class="hidden">
     <button data-tab="teams" class="active"><i class="fas fa-users"></i> Drużyny</button>
     <button data-tab="matches"><i class="fas fa-trophy"></i> Mecze</button>
-    <button data-tab="calendar"><i class="fa fa-calendar"></i> Kalendarz</button>
     <button data-tab="progress"><i class="fas fa-chart-line"></i> Postęp</button>
     <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Wyloguj</button>
   </nav>
+
   <!-- DRUŻYNY -->
-   <section id="teams" class="hidden">
+  <section id="teams" class="hidden">
     <h2><i class="fa-solid fa-people-group"></i> Drużyny i zawodnicy</h2>
     <form id="teamForm" class="form-row">
       <div class="form-col">
@@ -481,7 +339,7 @@
   </section>
 
   <!-- MECZE -->
- <section id="matches" class="hidden">
+  <section id="matches" class="hidden">
     <h2><i class="fas fa-trophy"></i> Dodaj nowy mecz</h2>
     <form id="matchForm">
       <div class="form-row">
@@ -544,17 +402,7 @@
       <tbody></tbody>
     </table>
   </section>
-  <!-- KALENDARZ -->
-  <section id="calendar" class="hidden">
-    <h2><i class="fa fa-calendar"></i> Kalendarz meczów</h2>
-    <form id="calendarAddForm" style="margin-bottom:14px;display:flex;gap:8px;align-items:center;">
-      <label for="calendarDate" style="margin:0;">Data meczu:</label>
-      <input type="date" id="calendarDate" required>
-      <input type="text" id="calendarDesc" required placeholder="Opis meczu (np. Jaguar vs. Sparta)">
-      <button type="submit"><i class="fa fa-plus"></i> Dodaj</button>
-    </form>
-    <div id="calendarSection"></div>
-  </section>
+
   <!-- POSTĘP -->
   <section id="progress" class="hidden">
     <h2><i class="fa-solid fa-chart-line"></i> Postęp zawodników</h2>
@@ -564,14 +412,16 @@
       <canvas id="trainingChart" width="450" height="250"></canvas>
       <canvas id="matchChart" width="450" height="250"></canvas>
     </div>
+  </section>
+</main>
 
-<div id="toast"></div>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
- const firebaseConfig = {
+  const firebaseConfig = {
     apiKey: "AIzaSyAWXiBO5-woCCEqCBc2rfOIo1RhUUtevzU",
     authDomain: "jaguar-analityka.firebaseapp.com",
     databaseURL: "https://jaguar-analityka-default-rtdb.firebaseio.com",
@@ -743,7 +593,11 @@
             });
           });
 
-     
+          // Opcje do selectów
+          const optionA = document.createElement('option');
+          optionA.value = id;
+          optionA.textContent = name;
+          teamASelect.appendChild(optionA);
 
           const optionChart = document.createElement('option');
           optionChart.value = id;
@@ -769,6 +623,118 @@
 
   // Szczegóły zawodnika (w karcie)
   function showPlayerDetails(teamId, playerId, playerData) {
+  if (!playerData) return;
+  currentDetailTeamId = teamId;
+  currentDetailPlayerId = playerId;
+  playerDetails.innerHTML = `
+    <h4><i class="fa-solid fa-user"></i> Szczegóły zawodnika: <span>${playerData.name}</span></h4>
+    <form id="trainingScoreForm">
+      <label>Dodaj ocenę treningu (0-10):</label>
+      <input type="number" id="trainingScoreInput" min="0" max="10" step="0.5" required />
+      <button type="submit"><i class="fa fa-plus"></i></button>
+    </form>
+    <form id="matchScoreForm">
+      <label>Dodaj ocenę meczu (0-10):</label>
+      <input type="number" id="matchScoreInputPlayer" min="0" max="10" step="0.5" required />
+      <button type="submit"><i class="fa fa-plus"></i></button>
+    </form>
+    <button id="showProgressBtn"><i class="fa fa-chart-line"></i> Zobacz progres</button>
+    <div id="individualChartContainer" style="margin-top:15px;display:none;">
+      <canvas id="individualChart" width="320" height="180"></canvas>
+      <button id="closeChartBtn" style="margin-top:10px;"><i class="fa fa-times"></i> Zamknij wykres</button>
+    </div>
+    <button id="closePlayerDetailsBtn"><i class="fa fa-times"></i> Zamknij szczegóły</button>
+  `;
+  playerDetails.classList.remove('hidden');
+  document.body.appendChild(playerDetails);
+  playerDetails.style.position = 'fixed';
+  playerDetails.style.top = '70px';
+  playerDetails.style.right = '25px';
+  playerDetails.style.zIndex = 1000;
+  playerDetails.style.width = '350px';
+  playerDetails.style.maxWidth = '96vw';
+
+  document.getElementById('closePlayerDetailsBtn').onclick = () => {
+    playerDetails.classList.add('hidden');
+  };
+  document.getElementById('trainingScoreForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const score = parseFloat(this.trainingScoreInput.value);
+    if (isNaN(score) || score < 0 || score > 10) return alert('Podaj ocenę od 0 do 10');
+    const newScoreKey = db.ref().push().key;
+    db.ref(`players/${currentDetailTeamId}/${currentDetailPlayerId}/trainingScores/${newScoreKey}`).set(score)
+      .then(() => { this.trainingScoreInput.value = ''; loadTeams(); });
+  });
+  document.getElementById('matchScoreForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const score = parseFloat(this.matchScoreInputPlayer.value);
+    if (isNaN(score) || score < 0 || score > 10) return alert('Podaj ocenę od 0 do 10');
+    const newScoreKey = db.ref().push().key;
+    db.ref(`players/${currentDetailTeamId}/${currentDetailPlayerId}/matchScores/${newScoreKey}`).set(score)
+      .then(() => { this.matchScoreInputPlayer.value = ''; loadTeams(); });
+  });
+
+  // WYKRES PROGRESU INDYWIDUALNEGO
+  let individualChart = null;
+  document.getElementById('showProgressBtn').onclick = () => {
+    const container = document.getElementById('individualChartContainer');
+    container.style.display = 'block';
+
+    db.ref(`players/${currentDetailTeamId}/${currentDetailPlayerId}`).once('value')
+      .then(snapshot => {
+        const pdata = snapshot.val() || {};
+        const trainingScores = Object.values(pdata.trainingScores || {});
+        const matchScores = Object.values(pdata.matchScores || {});
+        const labels = [];
+        const trainData = [];
+        const matchData = [];
+        const maxLen = Math.max(trainingScores.length, matchScores.length);
+        for (let i = 0; i < maxLen; i++) {
+          labels.push(`Ocena ${i + 1}`);
+          trainData.push(trainingScores[i] !== undefined ? trainingScores[i] : null);
+          matchData.push(matchScores[i] !== undefined ? matchScores[i] : null);
+        }
+        if (individualChart) individualChart.destroy();
+        individualChart = new Chart(document.getElementById('individualChart').getContext('2d'), {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: 'Oceny treningów',
+                data: trainData,
+                borderColor: '#003366',
+                backgroundColor: 'rgba(0,51,102,0.12)',
+                fill: false,
+                tension: 0.15
+              },
+              {
+                label: 'Oceny meczów',
+                data: matchData,
+                borderColor: '#ffb400',
+                backgroundColor: 'rgba(255,180,0,0.10)',
+                fill: false,
+                tension: 0.15
+              }
+            ]
+          },
+          options: {
+            scales: {
+              y: { beginAtZero: true, max: 10 }
+            },
+            plugins: {
+              legend: { position: 'bottom' }
+            }
+          }
+        });
+      });
+  };
+  document.getElementById('closeChartBtn').onclick = () => {
+    document.getElementById('individualChartContainer').style.display = 'none';
+    if (individualChart) individualChart.destroy();
+  };
+}
+  function showPlayerDetails(teamId, playerId, playerData) {
     if (!playerData) return;
     currentDetailTeamId = teamId;
     currentDetailPlayerId = playerId;
@@ -776,12 +742,12 @@
       <h4><i class="fa-solid fa-user"></i> Szczegóły zawodnika: <span>${playerData.name}</span></h4>
       <form id="trainingScoreForm">
         <label>Dodaj ocenę treningu (0-10):</label>
-        <input type="number" id="trainingScoreInput" min="0" max="10" step="0.1" required />
+        <input type="number" id="trainingScoreInput" min="0" max="10" step="0.5" required />
         <button type="submit"><i class="fa fa-plus"></i></button>
       </form>
       <form id="matchScoreForm">
         <label>Dodaj ocenę meczu (0-10):</label>
-        <input type="number" id="matchScoreInputPlayer" min="0" max="10" step="0.1" required />
+        <input type="number" id="matchScoreInputPlayer" min="0" max="10" step="0.5" required />
         <button type="submit"><i class="fa fa-plus"></i></button>
       </form>
       <button id="closePlayerDetailsBtn"><i class="fa fa-times"></i> Zamknij szczegóły</button>
@@ -868,7 +834,7 @@
         input.name = `jaguarBestPlayerRating${i+1}`;
         input.min = 0;
         input.max = 10;
-        input.step = 0.1;
+        input.step = 0.5;
         input.style.width = '80px';
         jaguarPlayersRatingsDiv.appendChild(label);
         jaguarPlayersRatingsDiv.appendChild(input);
@@ -889,7 +855,7 @@
           ratingInput.name = `opponentBestPlayerRating${idx+1}`;
           ratingInput.min = 0;
           ratingInput.max = 10;
-          ratingInput.step = 0.1;
+          ratingInput.step = 0.5;
           ratingInput.style.width = '80px';
           opponentPlayersRatingsDiv.appendChild(label);
           opponentPlayersRatingsDiv.appendChild(ratingInput);
@@ -1064,96 +1030,6 @@
     playersData = {};
     matchesData = {};
   }
-  // --- Tryb ciemny/jasny --- //
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  function updateDarkModeIcon() {
-    darkModeToggle.innerHTML = document.body.classList.contains('dark')
-      ? '<i class="fa fa-sun"></i>' : '<i class="fa fa-moon"></i>';
-  }
-  function setDarkMode(dark) {
-    if (dark) {
-      document.body.classList.add('dark');
-      localStorage.setItem('darkMode', '1');
-      showToast('Tryb ciemny aktywny', 'fa-moon');
-    } else {
-      document.body.classList.remove('dark');
-      localStorage.setItem('darkMode', '0');
-      showToast('Tryb jasny aktywny', 'fa-sun');
-    }
-    updateDarkModeIcon();
-  }
-  darkModeToggle.onclick = () => setDarkMode(!document.body.classList.contains('dark'));
-  if (localStorage.getItem('darkMode') === '1') setDarkMode(true);
-  else updateDarkModeIcon();
-  // --- Toast notification --- //
-  function showToast(msg, icon = 'fa-info-circle') {
-    const t = document.getElementById('toast');
-    t.innerHTML = `<i class="fa ${icon}"></i> ${msg}`;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2000);
-  }
-  // --- Zakładki --- //
-  const mainNav = document.getElementById('mainNav');
-  const navButtons = mainNav.querySelectorAll('button[data-tab]');
-  const sections = {
-    teams: document.getElementById('teams'),
-    matches: document.getElementById('matches'),
-    calendar: document.getElementById('calendar'),
-    progress: document.getElementById('progress'),
-  };
-  navButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      navButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      Object.values(sections).forEach(s => s.classList.add('hidden'));
-      sections[btn.dataset.tab].classList.remove('hidden');
-      if (btn.dataset.tab === 'teams') loadTeams();
-      if (btn.dataset.tab === 'matches') { loadTeamsForMatches(); loadMatches(); }
-      if (btn.dataset.tab === 'progress') loadTeamsForChart();
-      if (btn.dataset.tab === 'calendar') loadCalendar();
-    });
-  });
-  // --- KALENDARZ --- //
-  const calendarSection = document.getElementById('calendarSection');
-  const calendarAddForm = document.getElementById('calendarAddForm');
-  calendarAddForm.onsubmit = function(e) {
-    e.preventDefault();
-    const date = document.getElementById('calendarDate').value;
-    const desc = document.getElementById('calendarDesc').value.trim();
-    if (!date || !desc) return showToast("Uzupełnij datę i opis meczu!", "fa-exclamation");
-    firebase.database().ref('calendarMatches').push({date, desc})
-      .then(() => {
-        showToast("Dodano mecz do kalendarza!", "fa-calendar-plus");
-        calendarAddForm.reset();
-        loadCalendar();
-      });
-  }
-  function loadCalendar() {
-    calendarSection.innerHTML = "";
-    firebase.database().ref('calendarMatches').once('value').then(snap => {
-      const matches = Object.values(snap.val()||{}).map(m => ({...m}));
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month+1, 0);
-      let html = `<table class="calendar-table"><thead><tr>`;
-      const days = ['Pn','Wt','Śr','Cz','Pt','So','Nd'];
-      days.forEach(d=>html+=`<th>${d}</th>`);
-      html+=`</tr></thead><tbody><tr>`;
-      for(let i=0;i<(firstDay.getDay()+6)%7;i++) html+='<td></td>';
-      for(let d=1;d<=lastDay.getDate();d++) {
-        const dateStr = `${year}-${(month+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
-        const dayMatches = matches.filter(m=>m.date===dateStr);
-        html+=`<td>${d}${dayMatches.map(m=>`<div class="calendar-match">${m.desc}</div>`).join('')}</td>`;
-        if (((firstDay.getDay()+6)%7+d)%7===0) html+='</tr><tr>';
-      }
-      html+='</tr></tbody></table>';
-      calendarSection.innerHTML = html;
-    });
-  }
-  // Pozostały Twój kod JS (Firebase, ładowanie drużyn, meczów, postęp itd.) WKLEJ PONIŻEJ!
-  // ... (ZACHOWAJ CAŁY SWÓJ OBECNY KOD!) ...
 </script>
 </body>
 </html>
