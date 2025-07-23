@@ -604,8 +604,12 @@ const sections = {
             const players = snap.val() || {};
             const list = teamDiv.querySelector(`#playersList_${id}`);
             for (const pid in players) {
-              const li = document.createElement('li');
-             li.innerHTML = `<span>${players[pid].name}</span>
+              let playerName = player.name;
+if (player.temporaryTransfer) {
+  playerName += ` (→ wypożyczony do innej drużyny)`;
+}
+li.textContent = playerName;
+
   <button class="player-edit-btn" title="Edytuj" onclick="event.stopPropagation();window.editPlayer('${id}','${pid}','${players[pid].name.replace(/'/g,"\\'")}')"><i class="fa fa-pen"></i></button>
   <button class="player-remove-btn" title="Usuń" onclick="event.stopPropagation();window.removePlayer('${id}','${pid}')"><i class="fa fa-trash"></i></button>
 `;
@@ -1322,7 +1326,35 @@ setTimeout(() => {
     list.style.display = 'none';
   });
 }, 500);
-  
+  function checkTemporaryTransfers() {
+  const today = new Date().toISOString().split('T')[0]; // dzisiejsza data YYYY-MM-DD
+  db.ref('players').once('value').then(snapshot => {
+    const allTeams = snapshot.val() || {};
+    for (const fromTeamId in allTeams) {
+      const players = allTeams[fromTeamId];
+      for (const playerId in players) {
+        const player = players[playerId];
+        const transfer = player.temporaryTransfer;
+        if (transfer && transfer.endDate && transfer.to) {
+          if (transfer.endDate <= today) {
+            // Czas powrotu
+            db.ref(`players/${transfer.to}/${playerId}`).once('value').then(snap => {
+              const tempData = snap.val();
+              if (tempData) {
+                db.ref(`players/${fromTeamId}/${playerId}`).set(tempData)
+                  .then(() => db.ref(`players/${transfer.to}/${playerId}`).remove())
+                  .then(() => db.ref(`players/${fromTeamId}/${playerId}/temporaryTransfer`).remove())
+                  .then(() => console.log(`Zawodnik ${tempData.name} wrócił do drużyny ${fromTeamId}`));
+              }
+            });
+          }
+        }
+      }
+    }
+  });
+}
+checkTemporaryTransfers();
+
 </script>
 </body>
 </html>
