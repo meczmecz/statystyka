@@ -1326,7 +1326,7 @@ setTimeout(() => {
     list.style.display = 'none';
   });
 }, 500);
-  function checkTemporaryTransfers() {
+function checkTemporaryTransfers() {
   const today = new Date().toISOString().split('T')[0]; // dzisiejsza data YYYY-MM-DD
   db.ref('players').once('value').then(snapshot => {
     const allTeams = snapshot.val() || {};
@@ -1353,11 +1353,13 @@ setTimeout(() => {
     }
   });
 }
+
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    checkTemporaryTransfers();
+    checkTemporaryTransfers(); // <-- teraz bezpieczne
   }
 });
+
 
 
 </script>
