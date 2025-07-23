@@ -1353,7 +1353,12 @@ setTimeout(() => {
     }
   });
 }
-checkTemporaryTransfers();
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    checkTemporaryTransfers();
+  }
+});
+
 
 </script>
 </body>
