@@ -451,7 +451,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
- const firebaseConfig = {
+<script>
+  // KONFIGURACJA FIREBASE
+  const firebaseConfig = {
     apiKey: "AIzaSyAWXiBO5-woCCEqCBc2rfOIo1RhUUtevzU",
     authDomain: "jaguar-analityka.firebaseapp.com",
     databaseURL: "https://jaguar-analityka-default-rtdb.firebaseio.com",
@@ -460,9 +462,44 @@
     messagingSenderId: "797947184851",
     appId: "1:797947184851:web:0cc25ca0dd8b178f418c26",
   };
+
+  // INICJALIZACJA
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
-  const db = firebase.database();
+
+  // CZEKAJ NA ZAŁADOWANIE STRONY
+  document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm");
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+    const authMessage = document.getElementById("authMessage");
+
+    const loginSection = document.getElementById("loginSection");
+    const mainNav = document.getElementById("mainNav");
+    const sections = {
+      teams: document.getElementById("teamsSection")
+    };
+
+    // OBSŁUGA FORMULARZA LOGOWANIA
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault(); // ZATRZYMUJE PRZEŁADOWANIE STRONY
+      const email = loginEmail.value;
+      const password = loginPassword.value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((cred) => {
+          console.log("Zalogowano jako:", cred.user.email);
+          authMessage.textContent = "";
+          loginSection.classList.add("hidden");
+          mainNav.classList.remove("hidden");
+          sections.teams.classList.remove("hidden");
+        })
+        .catch((err) => {
+          authMessage.textContent = "Błąd logowania: " + err.message;
+        });
+    });
+  });
+</script>
 
   // ELEMENTY DOM js
   const loginSection = document.getElementById('loginSection');
