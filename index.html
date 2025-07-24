@@ -682,7 +682,7 @@ list.appendChild(li);
       document.getElementById('transferPlayerBtn').onclick = function() {
   // Wyświetl formularz przeniesienia
   showTransferForm(currentDetailTeamId, currentDetailPlayerId, playerData);
-  
+};
       <button id="showPlayerProgressBtn"><i class="fa fa-chart-line"></i> Zobacz postęp</button>
       <div id="playerProgressChartContainer" style="display:none;">
         <canvas id="playerProgressChart" width="300" height="220"></canvas>
@@ -1427,6 +1427,46 @@ setTimeout(() => {
     list.style.display = 'none';
   });
 }, 500);
+  function showTransferForm(teamId, playerId, playerData) {
+  db.ref('teams').once('value').then(snapshot => {
+    const teams = snapshot.val() || {};
+    let formHtml = '<h4>Przenieś zawodnika do innej drużyny</h4><select id="transferTeamSelect">';
+    for (const id in teams) {
+      if (id !== teamId) {
+        formHtml += `<option value="${id}">${teams[id].name}</option>`;
+      }
+    }
+    formHtml += '</select><button id="confirmTransferBtn">Przenieś</button><button id="cancelTransferBtn">Anuluj</button>';
+    const transferDiv = document.createElement('div');
+    transferDiv.innerHTML = formHtml;
+    transferDiv.style.background = '#fffbe8';
+    transferDiv.style.padding = '12px';
+    transferDiv.style.borderRadius = '8px';
+    transferDiv.style.marginTop = '10px';
+
+    playerDetails.appendChild(transferDiv);
+
+    document.getElementById('confirmTransferBtn').onclick = function() {
+      const newTeamId = document.getElementById('transferTeamSelect').value;
+      if (!newTeamId) return alert('Wybierz drużynę!');
+      db.ref(`players/${teamId}/${playerId}`).once('value').then(snap => {
+        const playerObj = snap.val();
+        db.ref(`players/${newTeamId}`).push(playerObj).then(() => {
+          db.ref(`players/${teamId}/${playerId}`).remove().then(() => {
+            alert('Zawodnik został przeniesiony!');
+            loadTeams();
+            playerDetails.classList.add('hidden');
+          });
+        });
+      });
+    };
+
+    document.getElementById('cancelTransferBtn').onclick = function() {
+      transferDiv.remove();
+    };
+  });
+}
+window.showTransferForm = showTransferForm;
   
 </script>
 </body>
