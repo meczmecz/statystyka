@@ -675,7 +675,7 @@ list.appendChild(li);
         <label>Dodaj ocenę meczu (0-10):</label>
         <input type="number" id="matchScoreInputPlayer" min="0" max="10" step="0.5" required />
         <button type="submit"><i class="fa fa-plus"></i></button>
-      </form>
+
       <button id="transferPlayerBtn"><i class="fa fa-exchange-alt"></i> Przenieś zawodnika</button>
       document.getElementById('transferPlayerBtn').onclick = function() {
   showTransferForm(currentDetailTeamId, currentDetailPlayerId, playerData);
@@ -686,6 +686,7 @@ list.appendChild(li);
         <button id="closePlayerProgressBtn" style="margin-top:7px;"><i class="fa fa-times"></i> Zamknij wykres</button>
       </div>
       <button id="closePlayerDetailsBtn"><i class="fa fa-times"></i> Zamknij szczegóły</button>
+              </form>
     ;
     
     playerDetails.classList.remove('hidden');
