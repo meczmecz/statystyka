@@ -678,7 +678,6 @@ list.appendChild(li);
       </form>
       <button id="transferPlayerBtn"><i class="fa fa-exchange-alt"></i> Przenieś zawodnika</button>
       document.getElementById('transferPlayerBtn').onclick = function() {
-  // Wyświetl formularz przeniesienia
   showTransferForm(currentDetailTeamId, currentDetailPlayerId, playerData);
 };
       <button id="showPlayerProgressBtn"><i class="fa fa-chart-line"></i> Zobacz postęp</button>
@@ -1245,24 +1244,24 @@ function loadPlaytimePlayers() {
   // Pobierz wszystkie drużyny do selecta
   db.ref('teams').once('value').then(snapshot => {
     const teams = snapshot.val() || {};
-    let formHtml = `
+    let formHtml = 
       <h4>Przenieś zawodnika: ${playerData.name}</h4>
       <label for="transferTeamSelect">Wybierz nową drużynę:</label>
       <select id="transferTeamSelect">
         ${Object.entries(teams).filter(([tid])=>tid!==teamId).map(([tid, t])=>`<option value="${tid}">${t.name}</option>`).join('')}
-      </select>
+      <select>
       <label>Typ przeniesienia:</label>
       <select id="transferTypeSelect">
         <option value="permanent">Permanentnie</option>
         <option value="temporary">Tymczasowo</option>
-      </select>
+      <select>
       <div id="temporaryTransferDetails" style="display:none;">
         <label>Na ile dni?</label>
         <input type="number" id="transferDaysInput" min="1" max="365" value="7"/>
-      </div>
+      <div>
       <button id="confirmTransferBtn">Potwierdź przeniesienie</button>
       <button id="cancelTransferBtn">Anuluj</button>
-    `;
+    ;
     playerDetails.innerHTML += `<div id="transferFormContainer" class="player-detail-card">${formHtml}</div>`;
 
     // Pokaż/ukryj pole "Na ile dni"
