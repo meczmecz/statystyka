@@ -664,7 +664,7 @@ list.appendChild(li);
     if (!playerData) return;
     currentDetailTeamId = teamId;
     currentDetailPlayerId = playerId;
-    playerDetails.innerHTML = `
+    playerDetails.innerHTML = 
       <h4><i class="fa-solid fa-user"></i> Szczegóły zawodnika: <span>${playerData.name}</span></h4>
       <form id="trainingScoreForm">
         <label>Dodaj ocenę treningu (0-10):</label>
@@ -679,9 +679,7 @@ list.appendChild(li);
       <button id="transferPlayerBtn"><i class="fa fa-exchange-alt"></i> Przenieś zawodnika</button>
 
 };
-      document.getElementById('transferPlayerBtn').onclick = function() {
-  // Wyświetl formularz przeniesienia
-  showTransferForm(currentDetailTeamId, currentDetailPlayerId, playerData);
+
 };
       <button id="showPlayerProgressBtn"><i class="fa fa-chart-line"></i> Zobacz postęp</button>
       <div id="playerProgressChartContainer" style="display:none;">
@@ -689,8 +687,9 @@ list.appendChild(li);
         <button id="closePlayerProgressBtn" style="margin-top:7px;"><i class="fa fa-times"></i> Zamknij wykres</button>
       </div>
       <button id="closePlayerDetailsBtn"><i class="fa fa-times"></i> Zamknij szczegóły</button>
-    `;
-    
+    ;
+          document.getElementById('transferPlayerBtn').onclick = function() {
+  showTransferForm(currentDetailTeamId, currentDetailPlayerId, playerData);
     playerDetails.classList.remove('hidden');
     document.body.appendChild(playerDetails);
     playerDetails.style.position = 'fixed';
