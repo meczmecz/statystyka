@@ -680,7 +680,7 @@ list.appendChild(li);
 
 };
 
-};
+
       <button id="showPlayerProgressBtn"><i class="fa fa-chart-line"></i> Zobacz postęp</button>
       <div id="playerProgressChartContainer" style="display:none;">
         <canvas id="playerProgressChart" width="300" height="220"></canvas>
@@ -690,6 +690,7 @@ list.appendChild(li);
     ;
           document.getElementById('transferPlayerBtn').onclick = function() {
   showTransferForm(currentDetailTeamId, currentDetailPlayerId, playerData);
+            };
     playerDetails.classList.remove('hidden');
     document.body.appendChild(playerDetails);
     playerDetails.style.position = 'fixed';
