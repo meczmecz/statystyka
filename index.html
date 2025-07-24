@@ -688,9 +688,7 @@ list.appendChild(li);
       </div>
       <button id="closePlayerDetailsBtn"><i class="fa fa-times"></i> Zamknij szczegóły</button>
     ;
-          document.getElementById('transferPlayerBtn').onclick = function() {
-  showTransferForm(currentDetailTeamId, currentDetailPlayerId, playerData);
-            };
+    
     playerDetails.classList.remove('hidden');
     document.body.appendChild(playerDetails);
     playerDetails.style.position = 'fixed';
@@ -702,6 +700,7 @@ list.appendChild(li);
 
     document.getElementById('closePlayerDetailsBtn').onclick = () => {
       playerDetails.classList.add('hidden');
+     
       
       // Schowaj i zniszcz wykres jeśli jest otwarty, ten od indywidualnego zawodniak
       
@@ -711,6 +710,9 @@ list.appendChild(li);
         playerProgressChartObj = null;
       }
     };
+         document.getElementById('transferPlayerBtn').onclick = function() {
+  showTransferForm(currentDetailTeamId, currentDetailPlayerId, playerData);
+            };
     
     document.getElementById('trainingScoreForm').addEventListener('submit', function(e) {
       e.preventDefault();
